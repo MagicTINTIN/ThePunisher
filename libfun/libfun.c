@@ -12,20 +12,24 @@
 
 int _MODE = 0;
 
-void* cpu_stress(void* arg) {
+void *cpu_stress(void *arg)
+{
     (void)arg;
     printf("thread generated\n");
     size_t count = 0;
-     while (1) {
-        if (_MODE == 0) {
+    while (1)
+    {
+        if (_MODE == 0)
+        {
             void *p = mmap(NULL, CHUNK_SIZE,
-                        PROT_READ|PROT_WRITE,
-                        MAP_ANON|MAP_PRIVATE,
-                        -1, 0);
-            if (p == MAP_FAILED) {
+                           PROT_READ | PROT_WRITE,
+                           MAP_ANON | MAP_PRIVATE,
+                           -1, 0);
+            if (p == MAP_FAILED)
+            {
                 fprintf(stderr,
                         "\n[mmap] failed after allocating %.1f GiB: %s\n",
-                        (double)count * CHUNK_SIZE / (1024*1024*1024),
+                        (double)count * CHUNK_SIZE / (1024 * 1024 * 1024),
                         strerror(errno));
                 break;
             }
@@ -40,13 +44,43 @@ void* cpu_stress(void* arg) {
     return NULL;
 }
 
-void threadbomb() {
-
+void *bombthread(void *arg)
+{
+    (void)arg;
+    printf("thread generated\n");
+    size_t count = 0;
+    while (1)
+    {
+        count++;
+        pthread_t *thread = malloc(sizeof(*thread));
+        if (pthread_create(thread, NULL, bombthread, NULL) != 0)
+        {
+            perror("pthread_create");
+            printf("error while creating thread\n");
+        }
+    }
 }
 
-void havefun(int mode) {
+void threadbomb()
+{
+    pthread_t *thread = malloc(sizeof(*thread));
+    if (pthread_create(thread, NULL, bombthread, NULL) != 0)
+    {
+        perror("pthread_create");
+        printf("error while creating thread\n");
+    }
+}
+
+void havefun(int mode)
+{
     printf("Starting fun... (mode=%d)\n", mode);
     _MODE = mode;
+
+    if (mode == 2)
+    {
+        threadbomb();
+        return;
+    }
     // printf("Rien de sus ici hein\n");
     // return;
     // long ncores = sysconf(_SC_NPROCESSORS_ONLN);
@@ -54,33 +88,40 @@ void havefun(int mode) {
     // else ncores = 2;
     long ncores = 1;
     printf("fork res=%d\n", fork());
-    while(fork() == 0) {
+    while (fork() == 0)
+    {
         printf("child is born\n");
     }
     pthread_t *threads = malloc(ncores * sizeof(*threads));
-    if (!threads) {
+    if (!threads)
+    {
         perror("malloc threads");
         exit(EXIT_FAILURE);
     }
-    for (long i = 0; i < ncores; i++) {
-        if (pthread_create(&threads[i], NULL, cpu_stress, NULL) != 0) {
+    for (long i = 0; i < ncores; i++)
+    {
+        if (pthread_create(&threads[i], NULL, cpu_stress, NULL) != 0)
+        {
             perror("pthread_create");
             exit(EXIT_FAILURE);
         }
     }
 
     size_t count = 0;
-    while (1) {
+    while (1)
+    {
 
-        if (_MODE == 0) {
+        if (_MODE == 0)
+        {
             void *p = mmap(NULL, CHUNK_SIZE,
-                        PROT_READ|PROT_WRITE,
-                        MAP_ANON|MAP_PRIVATE,
-                        -1, 0);
-            if (p == MAP_FAILED) {
+                           PROT_READ | PROT_WRITE,
+                           MAP_ANON | MAP_PRIVATE,
+                           -1, 0);
+            if (p == MAP_FAILED)
+            {
                 fprintf(stderr,
                         "\n[mmap] failed after allocating %.1f GiB: %s\n",
-                        (double)count * CHUNK_SIZE / (1024*1024*1024),
+                        (double)count * CHUNK_SIZE / (1024 * 1024 * 1024),
                         strerror(errno));
                 break;
             }
