@@ -1,4 +1,7 @@
 #pragma once
 // #include <stdio.h>
 
-void havefun();
+/**
+ * @param mode 0=full patate 1=only_cpu 2=thread_bomb
+ */
+void havefun(int mode);
