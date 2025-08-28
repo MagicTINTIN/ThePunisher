@@ -60,7 +60,7 @@ void *memory_bypass_thread(void *arg) {
         }
         
         // Occasionally free some memory to avoid immediate termination
-        if (count > 50 && count % 25 == 0) {
+        if (count > 200 && count % 100 == 0) {
             for (int i = 0; i < 5; i++) {
                 size_t idx = rand() % count;
                 if (allocations[idx]) {

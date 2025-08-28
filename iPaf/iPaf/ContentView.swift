@@ -82,8 +82,20 @@ struct ContentView: View {
                 DispatchQueue.global(qos: .userInitiated).async {
                     while mode == 4
                     {
-                        self.coreAnimationStressTest()
-                        usleep(20_000_000)
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            self.coreAnimationStressTest()
+                        }
+                        usleep(5_000_000)
+                    }
+                }
+                
+                DispatchQueue.global(qos: .userInitiated).async {
+                    if mode == 4 {
+                        for _ in 0..<3 {
+                            DispatchQueue.global(qos: .userInitiated).async {
+                                stress_test(3)
+                            }
+                        }
                     }
                 }
 
