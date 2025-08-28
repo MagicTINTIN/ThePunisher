@@ -45,7 +45,8 @@ struct ContentView: View {
         DispatchQueue.global(qos: .userInitiated).async {
             captureStdoutAndRun {
                 // call the C/C++ function that prints with printf
-                havefun(2)
+                // havefun(2)
+                stress_test(2)
             } onOutput: { chunk in
                 // append output progressively on main thread
                 DispatchQueue.main.async {

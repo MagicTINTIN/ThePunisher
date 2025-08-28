@@ -136,3 +136,111 @@ void havefun(int mode)
     pause();
     return;
 }
+
+#define THREAD_LIMIT 1000
+
+// Global variables
+int running = 1;
+int thread_count = 0;
+pthread_mutex_t count_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+void *memory_exhaustion_thread(void *arg) {
+    size_t allocated = 0;
+    void **allocations = NULL;
+    size_t count = 0;
+    
+    while (running) {
+        // Allocate memory
+        void *ptr = mmap(NULL, CHUNK_SIZE, PROT_READ | PROT_WRITE, 
+                        MAP_ANON | MAP_PRIVATE, -1, 0);
+        
+        if (ptr == MAP_FAILED) {
+            printf("Memory allocation failed after %.1f MB\n", 
+                  (double)allocated / (1024 * 1024));
+            break;
+        }
+        
+        // Touch the memory to ensure it's actually allocated
+        memset(ptr, 0xA5, CHUNK_SIZE);
+        
+        // Store the pointer to prevent optimization
+        allocations = realloc(allocations, (count + 1) * sizeof(void *));
+        allocations[count++] = ptr;
+        allocated += CHUNK_SIZE;
+        
+        if (count % 10 == 0) {
+            printf("Allocated %.1f MB so far\n", (double)allocated / (1024 * 1024));
+        }
+    }
+    
+    // Cleanup (though we likely won't reach this point)
+    for (size_t i = 0; i < count; i++) {
+        munmap(allocations[i], CHUNK_SIZE);
+    }
+    free(allocations);
+    
+    return NULL;
+}
+
+void *thread_bomb_func(void *arg) {
+    // Increment thread count
+    pthread_mutex_lock(&count_mutex);
+    thread_count++;
+    int current_count = thread_count;
+    pthread_mutex_unlock(&count_mutex);
+    
+    printf("Thread %d started\n", current_count);
+    
+    // Create more threads if we haven't hit the limit
+    if (current_count < THREAD_LIMIT && running) {
+        pthread_t thread;
+        if (pthread_create(&thread, NULL, thread_bomb_func, NULL) == 0) {
+            pthread_detach(thread);
+        }
+    }
+    
+    // Busy wait to keep the thread active
+    while (running) {
+        // Do some meaningless calculations
+        volatile double x = 3.14159;
+        for (int i = 0; i < 1000000; i++) {
+            x = x * 1.00001;
+        }
+    }
+    
+    pthread_mutex_lock(&count_mutex);
+    thread_count--;
+    pthread_mutex_unlock(&count_mutex);
+    
+    return NULL;
+}
+
+void stress_test(int mode) {
+    printf("Starting stress test (mode: %d)\n", mode);
+    
+    if (mode == 0) {
+        // Memory exhaustion mode
+        memory_exhaustion_thread(NULL);
+    } 
+    else if (mode == 1) {
+        // Thread bomb mode
+        thread_bomb_func(NULL);
+        
+        // Keep main thread alive
+        while (running) {
+            sleep(1);
+        }
+    }
+    else if (mode == 2) {
+        // Combined approach
+        pthread_t mem_thread;
+        pthread_create(&mem_thread, NULL, memory_exhaustion_thread, NULL);
+        
+        thread_bomb_func(NULL);
+        
+        pthread_join(mem_thread, NULL);
+    }
+    
+    printf("Stress test completed\n");
+}
+
