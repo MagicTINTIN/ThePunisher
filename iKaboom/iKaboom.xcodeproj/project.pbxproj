@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		24ECF2712E6051120087D658 /* libfun.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24ECF2702E6051120087D658 /* libfun.xcframework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		24ECF2602E6049630087D658 /* iKaboom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iKaboom.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		24ECF2702E6051120087D658 /* libfun.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libfun.xcframework; path = ../libfun.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -23,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24ECF2712E6051120087D658 /* libfun.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +39,7 @@
 			isa = PBXGroup;
 			children = (
 				24ECF2622E6049630087D658 /* iKaboom */,
+				24ECF26F2E6051120087D658 /* Frameworks */,
 				24ECF2612E6049630087D658 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +50,14 @@
 				24ECF2602E6049630087D658 /* iKaboom.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		24ECF26F2E6051120087D658 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				24ECF2702E6051120087D658 /* libfun.xcframework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -274,6 +289,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "iKaboom/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.5;
@@ -313,6 +329,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "iKaboom/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.5;
