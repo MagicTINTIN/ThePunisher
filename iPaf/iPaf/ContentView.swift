@@ -22,10 +22,11 @@ struct ContentView: View {
                 .padding()
             
             Picker("Test Mode", selection: $selectedMode) {
-                Text("Memory Bypass").tag(0)
+                Text("Memory exhaust").tag(0)
                 Text("GPU Stress").tag(1)
                 Text("Core Animation").tag(2)
-                Text("Combined Attack").tag(3)
+                Text("Combined gpu/memory").tag(3)
+                Text("PAF").tag(4)
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding(.horizontal)
@@ -57,7 +58,7 @@ struct ContentView: View {
             .cornerRadius(8)
             .padding(.horizontal)
             
-            Text("Warning: This may crash your iPad!")
+            Text("Warning: this is fun!")
                 .font(.caption)
                 .foregroundColor(.red)
                 .padding()
@@ -78,7 +79,22 @@ struct ContentView: View {
                 self.coreAnimationStressTest()
             } else {
                 // Regular stress test
-                stress_test(mode)
+                DispatchQueue.global(qos: .userInitiated).async {
+                    while mode == 4
+                    {
+                        self.coreAnimationStressTest()
+                        usleep(20_000_000)
+                    }
+                }
+
+                DispatchQueue.global(qos: .userInitiated).async {
+                    if mode == 4 {
+                        stress_test(3)
+                    }
+                    else {
+                        stress_test(mode)
+                    }
+                }
             }
             
             DispatchQueue.main.async {
@@ -91,7 +107,7 @@ struct ContentView: View {
     private func coreAnimationStressTest() {
         // Create a massive number of layers/views to stress Core Animation
         DispatchQueue.main.async {
-            for i in 0..<5000 {
+            for i in 0..<15000 {
                 let view = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
                 view.backgroundColor = UIColor(red: CGFloat.random(in: 0...1),
                                               green: CGFloat.random(in: 0...1),
