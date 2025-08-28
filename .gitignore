@@ -91,4 +91,4 @@ lib/
 ios_lib/
 simios_lib/
 mac_lib/
-libfun.xcframework/
+*.xcframework/

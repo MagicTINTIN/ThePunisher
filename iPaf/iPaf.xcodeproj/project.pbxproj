@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		24FBE9682E608D6500998DF3 /* libpouf.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24FBE9672E608D6500998DF3 /* libpouf.xcframework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		24FBE9562E608AA000998DF3 /* iPaf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iPaf.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		24FBE9672E608D6500998DF3 /* libpouf.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = libpouf.xcframework; path = ../libpouf.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -23,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24FBE9682E608D6500998DF3 /* libpouf.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +39,7 @@
 			isa = PBXGroup;
 			children = (
 				24FBE9582E608AA000998DF3 /* iPaf */,
+				24FBE9662E608D6500998DF3 /* Frameworks */,
 				24FBE9572E608AA000998DF3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +50,14 @@
 				24FBE9562E608AA000998DF3 /* iPaf.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		24FBE9662E608D6500998DF3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				24FBE9672E608D6500998DF3 /* libpouf.xcframework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -274,6 +289,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "iPaf/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.5;
@@ -313,6 +329,7 @@
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "iPaf/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
 				XROS_DEPLOYMENT_TARGET = 2.5;
