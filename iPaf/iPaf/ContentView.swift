@@ -16,54 +16,63 @@ struct ContentView: View {
     @State private var selectedMode = 0
     
     var body: some View {
-        VStack(spacing: 16) {
-            Text("Advanced iPad Stress Test")
-                .font(.title)
-                .padding()
-            
-            Picker("Test Mode", selection: $selectedMode) {
-                Text("Memory exhaust").tag(0)
-                Text("GPU Stress").tag(1)
-                Text("Core Animation").tag(2)
-                Text("Combined gpu/memory").tag(3)
-                Text("PAF").tag(4)
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding(.horizontal)
-            .disabled(isRunning)
-            
-            Button(action: {
-                runStressTest(mode: Int32(selectedMode))
-            }) {
-                Text(isRunning ? "Testing in progress..." : "Start Stress Test")
-                    .foregroundColor(.white)
+        ZStack {
+            // Background image with low opacity
+            Image("paflefond") // Make sure to add this image to your assets
+                .resizable()
+                //.scaledToFill()
+                .opacity(0.3) // 10% opacity - adjust as needed
+                .edgesIgnoringSafeArea(.all)
+            VStack(spacing: 16) {
+                Text("Advanced iPad Stress Test")
+                    .font(.title)
                     .padding()
-                    .frame(maxWidth: .infinity)
-            }
-            .background(isRunning ? Color.gray : Color.red)
-            .cornerRadius(10)
-            .padding(.horizontal)
-            .disabled(isRunning)
-            
-            // Output display
-            ScrollView {
-                Text(output)
-                    .font(.system(size: 12, design: .monospaced))
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Picker("Test Mode", selection: $selectedMode) {
+                    Text("Memory exhaust").tag(0)
+                    Text("GPU Stress").tag(1)
+                    Text("Core Animation").tag(2)
+                    Text("Combined gpu/memory").tag(3)
+                    Text("PAF").tag(4)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding(.horizontal)
+                .disabled(isRunning)
+                
+                Button(action: {
+                    runStressTest(mode: Int32(selectedMode))
+                }) {
+                    Text(isRunning ? "Testing in progress..." : "Start Stress Test")
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                }
+                .background(isRunning ? Color.gray : Color.red)
+                .cornerRadius(10)
+                .padding(.horizontal)
+                .disabled(isRunning)
+                
+                // Output display
+                ScrollView {
+                    Text(output)
+                        .font(.system(size: 12, design: .monospaced))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                }
+                .frame(minHeight: 200)
+                .background(Color.black.opacity(0.2))
+                //.opacity(0.1)
+                .foregroundColor(.green)
+                .cornerRadius(8)
+                .padding(.horizontal)
+                
+                Text("Warning: this is fun!")
+                    .font(.caption)
+                    .foregroundColor(.red)
                     .padding()
             }
-            .frame(minHeight: 200)
-            .background(Color.black)
-            .foregroundColor(.green)
-            .cornerRadius(8)
-            .padding(.horizontal)
-            
-            Text("Warning: this is fun!")
-                .font(.caption)
-                .foregroundColor(.red)
-                .padding()
+            .padding()
         }
-        .padding()
     }
     
     private func runStressTest(mode: Int32) {
